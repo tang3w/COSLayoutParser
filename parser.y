@@ -2,7 +2,7 @@
 #include "common.h"
 %}
 
-%define api.prefix {cs_layout_}
+%define api.prefix {cslayout}
 
 %token NAME;
 %token NUMBER;
@@ -39,6 +39,6 @@ atom: NUMBER
 
 %%
 
-void cs_layout_error (char const *s) {
+void cslayouterror (char const *s) {
   fprintf(stderr, "%s\n", s);
 }

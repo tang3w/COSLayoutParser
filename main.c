@@ -1,7 +1,7 @@
 #include "common.h"
 
 int main(int argc, char **argv) {
-    if(!cs_layout_parse()) {
+    if(!cslayoutparse()) {
         fprintf(stdout, "Success!\n");
     }
 

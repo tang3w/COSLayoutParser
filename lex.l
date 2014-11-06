@@ -8,7 +8,7 @@ void lex_error(void);
 %option noyywrap
 %option noinput
 %option nounput
-%option prefix="cs_layout_"
+%option prefix="cslayout"
 
 i [0-9]+
 name tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|cc
