@@ -9,3 +9,6 @@ lex.o: lex.c parser.h
 
 lex.c: lex.l
 	flex -o $@ $<
+
+clean:
+	rm -f lex.h lex.c lex.o parser.h parser.c parser
