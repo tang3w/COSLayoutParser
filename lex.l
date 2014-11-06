@@ -5,7 +5,7 @@
 void lex_error(void);
 %}
 
-%option noyywrap
+%option noyywrap noinput
 %option prefix="cs_layout_"
 
 i [0-9]+

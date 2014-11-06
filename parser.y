@@ -19,7 +19,7 @@ rule: rule ',' expr
     | expr
     ;
 expr: NAME '=' term
-    |
+    | %empty
     ;
 term: NAME '=' term
     | rval
@@ -41,12 +41,4 @@ atom: NUMBER
 
 void cs_layout_error (char const *s) {
   fprintf(stderr, "%s\n", s);
-}
-
-int main(int argc, char **argv) {
-    if(!cs_layout_parse()) {
-        fprintf(stdout, "Success!\n");
-    }
-
-    return 0;
 }

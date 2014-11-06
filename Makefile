@@ -1,4 +1,4 @@
-parser: parser.c lex.o
+parser: main.c parser.c lex.o
 	cc -o $@ $^
 
 parser.c parser.h: parser.y
