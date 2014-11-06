@@ -2,7 +2,16 @@
 #include "common.h"
 %}
 
+%define api.prefix {cs_layout_}
+
 %token NAME;
+%token NUMBER;
+%token PERCENTAGE;
+%token COORD;
+
+%left  '+' '-'
+%left  '*' '/'
+%right '='
 
 %%
 
@@ -15,16 +24,27 @@ expr: NAME '=' term
 term: NAME '=' term
     | rval
     ;
-rval: '0' ;
+rval: rval '+' item
+    | rval '-' item
+    | item
+    ;
+item: item '*' atom
+    | item '/' atom
+    | atom
+    ;
+atom: NUMBER
+    | PERCENTAGE
+    | COORD
+    ;
 
 %%
 
-void yyerror (char const *s) {
+void cs_layout_error (char const *s) {
   fprintf(stderr, "%s\n", s);
 }
 
 int main(int argc, char **argv) {
-    if(!yyparse()) {
+    if(!cs_layout_parse()) {
         fprintf(stdout, "Success!\n");
     }
 

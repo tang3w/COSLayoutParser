@@ -6,17 +6,30 @@ void lex_error(void);
 %}
 
 %option noyywrap
+%option prefix="cs_layout_"
 
+i [0-9]+
 name tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|cc
+digit [-+]?{i}
+float [-+]?({i}\.{i}?|{i}?\.{i})
+number {digit}|{float}[fF]?
+percentage ({digit}|{float})%
+coord $\.{name}
 
 %%
 
 [ \n\r\t]
-","    { return ','; }
-"="    { return '='; }
-{name} { return NAME; }
-"0"    { return '0'; }
-.      { lex_error(); }
+","          { return ','; }
+"="          { return '='; }
+"+"          { return '+'; }
+"-"          { return '-'; }
+"*"          { return '*'; }
+"/"          { return '/'; }
+{name}       { return NAME; }
+{number}     { return NUMBER; }
+{percentage} { return PERCENTAGE; }
+{coord}      { return COORD; }
+.            { lex_error(); }
 
 %%
 
