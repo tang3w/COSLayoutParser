@@ -1,11 +1,15 @@
 %{
-#include "parser.h"
 #include "common.h"
+#include "parser.h"
 
-void lex_error(void);
+#define YYSTYPE CSLAYOUTSTYPE
+
+void lex_error(char *text);
 %}
 
 %option noyywrap
+%option reentrant
+%option bison-bridge
 %option prefix="cslayout"
 %option header-file="lex.h"
 %option noinput
@@ -32,10 +36,10 @@ coord $\.{name}
 {number}     { return NUMBER; }
 {percentage} { return PERCENTAGE; }
 {coord}      { return COORD; }
-.            { lex_error(); }
+.            { lex_error(yytext); }
 
 %%
 
-void lex_error(void) {
-    fprintf(stderr, "unrecognized character %s\n", yytext);
+void lex_error(char *text) {
+    fprintf(stderr, "Unrecognized text %s\n", text);
 }

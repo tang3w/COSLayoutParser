@@ -1,9 +1,15 @@
 #include "common.h"
 
 int main(int argc, char **argv) {
-    if(!cslayoutparse()) {
-        fprintf(stdout, "Success!\n");
-    }
+    void *scanner;
 
-    return 0;
+    cslayoutlex_init(&scanner);
+
+    int result = (cslayoutparse(scanner));
+
+    cslayoutlex_destroy(scanner);
+
+    if (!result) fprintf(stdout, "Success!\n");
+
+    return result;
 }

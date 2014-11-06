@@ -1,7 +1,14 @@
 %{
 #include "common.h"
+#include "parser.h"
+
+void cslayouterror(void *scanner, char *s);
+int cslayoutlex(YYSTYPE *lvalp, void *scanner);
 %}
 
+%define api.pure full
+%lex-param {void *scanner}
+%parse-param {void *scanner}
 %define api.prefix {cslayout}
 
 %token NAME;
@@ -39,6 +46,6 @@ atom: NUMBER
 
 %%
 
-void cslayouterror (char const *s) {
+void cslayouterror(void *scanner, char *s) {
   fprintf(stderr, "%s\n", s);
 }

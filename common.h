@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cslayoutlex(void);
-void cslayouterror (char const *s);
-int cslayoutparse(void);
+int cslayoutparse(void *scanner);
+int cslayoutlex_init(void **ptr_yy_globals);
+int cslayoutlex_destroy(void *yyscanner);
