@@ -1,8 +1,6 @@
 %{
-#include "common.h"
+#include <stdio.h>
 #include "parser.h"
-
-#define YYSTYPE CSLAYOUTSTYPE
 
 void lex_error(char *text);
 %}

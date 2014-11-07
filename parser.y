@@ -1,5 +1,5 @@
 %{
-#include "common.h"
+#include <stdio.h>
 #include "parser.h"
 
 void cslayouterror(void *scanner, char *s);
@@ -10,6 +10,10 @@ int cslayoutlex(YYSTYPE *lvalp, void *scanner);
 %lex-param {void *scanner}
 %parse-param {void *scanner}
 %define api.prefix {cslayout}
+
+%code requires {
+#define YYSTYPE CSLAYOUTSTYPE
+}
 
 %token NAME;
 %token NUMBER;
