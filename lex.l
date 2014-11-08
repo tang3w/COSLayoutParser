@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include "context.h"
 #include "parser.h"
 
 void lex_error(char *text);
@@ -24,16 +25,37 @@ coord $\.{name}
 %%
 
 [ \n\r\t]
-","          { return ','; }
 "="          { return '='; }
 "+"          { return '+'; }
 "-"          { return '-'; }
 "*"          { return '*'; }
 "/"          { return '/'; }
 {name}       { return NAME; }
-{number}     { return NUMBER; }
-{percentage} { return PERCENTAGE; }
-{coord}      { return COORD; }
+
+{number}     {
+                 CSLAYOUT_AST *ast = cslayout_create_ast(NUMBER, NULL, NULL);
+                 ast->value.number = atof(yytext);
+                 *yylval = ast;
+                 return NUMBER;
+             }
+
+{percentage} {
+                 CSLAYOUT_AST *ast = cslayout_create_ast(PERCENTAGE, NULL, NULL);
+                 ast->value.percentage = atof(yytext);
+                 *yylval = ast;
+                 return PERCENTAGE;
+             }
+
+{coord}      {
+                 CSLAYOUT_AST *ast = cslayout_create_ast(COORD, NULL, NULL);
+
+                 ast->coord = (char *)malloc((strlen(yytext + 2) + 1) * sizeof(char));
+                 strcpy(ast->coord, yytext + 2);
+
+                 *yylval = ast;
+                 return COORD;
+             }
+
 .            { lex_error(yytext); }
 
 %%

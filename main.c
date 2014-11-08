@@ -1,22 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "parser.h"
-#include "lex.h"
-
-int cslayoutparse(yyscan_t scanner);
-int cslayoutlex_init(yyscan_t *scanner_ptr);
-int cslayoutlex_destroy(yyscan_t scanner);
+#include "context.h"
 
 int main(int argc, char **argv) {
-    void *scanner;
+    CSLAYOUT_AST *ast = cslayout_parse_rule("tt = bb = rr = ll = 50% + 10.0f * $.ll");
 
-    cslayoutlex_init(&scanner);
+    cslayout_print_ast(ast);
 
-    int result = (cslayoutparse(scanner));
+    cslayout_destroy_ast(ast);
 
-    cslayoutlex_destroy(scanner);
-
-    if (!result) fprintf(stdout, "Success!\n");
-
-    return result;
+    return 0;
 }

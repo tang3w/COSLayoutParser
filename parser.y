@@ -1,17 +1,23 @@
 %{
 #include <stdio.h>
+#include "context.h"
 #include "parser.h"
 
-void cslayouterror(void *scanner, char *s);
-int cslayoutlex(YYSTYPE *lvalp, void *scanner);
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s);
+int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp);
 %}
 
 %define api.pure full
 %lex-param {void *scanner}
+%lex-param {CSLAYOUT_AST **astpp}
 %parse-param {void *scanner}
+%parse-param {CSLAYOUT_AST **astpp}
 %define api.prefix {cslayout}
+%define api.value.type {CSLAYOUT_AST *}
 
 %code requires {
+#include "context.h"
+
 #define YYSTYPE CSLAYOUTSTYPE
 }
 
@@ -26,30 +32,25 @@ int cslayoutlex(YYSTYPE *lvalp, void *scanner);
 
 %%
 
-rule: rule ',' expr
-    | expr
+expr: %empty
+    | NAME '=' expr { *astpp = $$ = cslayout_create_ast('=', NULL, $3);; }
+    | rval          { *astpp = $$ = $1; }
     ;
-expr: NAME '=' term
-    | %empty
+rval: rval '+' item { *astpp = $$ = cslayout_create_ast('+', $1, $3); }
+    | rval '-' item { *astpp = $$ = cslayout_create_ast('-', $1, $3); }
+    | item          { *astpp = $$ = $1; }
     ;
-term: NAME '=' term
-    | rval
+item: item '*' atom { *astpp = $$ = cslayout_create_ast('*', $1, $3); }
+    | item '/' atom { *astpp = $$ = cslayout_create_ast('/', $1, $3); }
+    | atom          { *astpp = $$ = $1; }
     ;
-rval: rval '+' item
-    | rval '-' item
-    | item
-    ;
-item: item '*' atom
-    | item '/' atom
-    | atom
-    ;
-atom: NUMBER
-    | PERCENTAGE
-    | COORD
+atom: NUMBER        { *astpp = $$ = $1; }
+    | PERCENTAGE    { *astpp = $$ = $1; }
+    | COORD         { *astpp = $$ = $1; }
     ;
 
 %%
 
-void cslayouterror(void *scanner, char *s) {
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s) {
   fprintf(stderr, "%s\n", s);
 }
