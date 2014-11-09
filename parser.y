@@ -21,7 +21,7 @@ int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp);
 #define YYSTYPE CSLAYOUTSTYPE
 }
 
-%token NAME;
+%token ATTR;
 %token NUMBER;
 %token PERCENTAGE;
 %token COORD;
@@ -33,7 +33,7 @@ int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp);
 %%
 
 expr: %empty
-    | NAME '=' expr { *astpp = $$ = cslayout_create_ast('=', NULL, $3);; }
+    | ATTR '=' expr { *astpp = $$ = cslayout_create_ast('=', $1, $3); }
     | rval          { *astpp = $$ = $1; }
     ;
 rval: rval '+' item { *astpp = $$ = cslayout_create_ast('+', $1, $3); }

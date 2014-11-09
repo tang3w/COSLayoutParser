@@ -9,10 +9,11 @@ int cslayoutlex_destroy (yyscan_t yyscanner);
 CSLAYOUT_AST *cslayout_create_ast(int type, CSLAYOUT_AST *l, CSLAYOUT_AST *r) {
     CSLAYOUT_AST *astp = (CSLAYOUT_AST *)malloc(sizeof(CSLAYOUT_AST));
 
-    astp->type = type;
+    astp->node_type = type;
     astp->l = l;
     astp->r = r;
-    astp->coord = NULL;
+    astp->value.coord = NULL;
+    astp->data = NULL;
 
     return astp;
 }
@@ -42,19 +43,20 @@ void cslayout_destroy_ast(CSLAYOUT_AST *astp) {
         cslayout_destroy_ast(astp->l);
         cslayout_destroy_ast(astp->r);
 
-        if (astp->coord != NULL) free(astp->coord);
+        int type = astp->node_type;
+        char *coord = astp->value.coord;
+
+        if ((type == ATTR || type == COORD) && coord != NULL)
+            free(coord);
 
         free(astp);
     }
 }
 
 void cslayout_print_ast(CSLAYOUT_AST *astp) {
-    if (astp->l != NULL) {
+    if (astp != NULL) { 
         cslayout_print_ast(astp->l);
-    }
-    if (astp->r != NULL) {
         cslayout_print_ast(astp->r);
+        printf("node type: %d\n", astp->node_type);
     }
-
-    printf("node type: %d\n", astp->type);
 }

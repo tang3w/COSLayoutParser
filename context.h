@@ -5,14 +5,15 @@
     (YYSTYPE *yylval_param, yyscan_t yyscanner, CSLAYOUT_AST **astpp)
 
 struct CSLAYOUT_AST {
-    int type;
+    int node_type;
     struct CSLAYOUT_AST *l;
     struct CSLAYOUT_AST *r;
     union {
         float number;
         float percentage;
+        char *coord;
     } value;
-    char *coord;
+    void *data;
 };
 
 typedef struct CSLAYOUT_AST CSLAYOUT_AST;
