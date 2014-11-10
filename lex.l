@@ -15,13 +15,13 @@ void lex_error(char *text);
 %option nounput
 
 i [0-9]+
-attr tt|tb|ll|lr|bb|bt|rr|rl|ct|cl
 digit [-+]?{i}
 float [-+]?({i}\.{i}?|{i}?\.{i})
 number {digit}|{float}[fF]?
 percentage ({digit}|{float})%
-coord_name {attr}|width|height
-coord %{coord_name}
+name tt|tb|ll|lr|bb|bt|rr|rl|ct|cl
+attr {name}|minw|maxw|minh|maxh
+coord %({name}|w|h)
 
 %%
 
@@ -34,38 +34,38 @@ coord %{coord_name}
 "/"          { return '/'; }
 
 {attr}       {
-                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(ATTR, NULL, NULL);
+                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(CSLAYOUT_TOKEN_ATTR, NULL, NULL);
 
                  ast->value.coord = (char *)malloc((strlen(yytext) + 1) * sizeof(char));
                  strcpy(ast->value.coord, yytext);
 
-                 return ATTR;
+                 return CSLAYOUT_TOKEN_ATTR;
              }
 
 {number}     {
-                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(NUMBER, NULL, NULL);
+                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(CSLAYOUT_TOKEN_NUMBER, NULL, NULL);
 
                  ast->value.number = atof(yytext);
 
-                 return NUMBER;
+                 return CSLAYOUT_TOKEN_NUMBER;
              }
 
 {percentage} {
-                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(PERCENTAGE, NULL, NULL);
+                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(CSLAYOUT_TOKEN_PERCENTAGE, NULL, NULL);
 
                  ast->value.percentage = atof(yytext);
 
-                 return PERCENTAGE;
+                 return CSLAYOUT_TOKEN_PERCENTAGE;
              }
 
 {coord}      {
-                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(COORD, NULL, NULL);
+                 CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(CSLAYOUT_TOKEN_COORD, NULL, NULL);
 
                  ast->value.coord = (char *)malloc((strlen(yytext + 1) + 1) * sizeof(char));
                  strcpy(ast->value.coord, yytext + 1);
                  *argc += 1;
 
-                 return COORD;
+                 return CSLAYOUT_TOKEN_COORD;
              }
 
 .            { lex_error(yytext); }

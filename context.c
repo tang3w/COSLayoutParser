@@ -46,17 +46,9 @@ void cslayout_destroy_ast(CSLAYOUT_AST *astp) {
         int type = astp->node_type;
         char *coord = astp->value.coord;
 
-        if ((type == ATTR || type == COORD) && coord != NULL)
+        if ((type == CSLAYOUT_TOKEN_ATTR || type == CSLAYOUT_TOKEN_COORD) && coord != NULL)
             free(coord);
 
         free(astp);
-    }
-}
-
-void cslayout_print_ast(CSLAYOUT_AST *astp) {
-    if (astp != NULL) { 
-        cslayout_print_ast(astp->l);
-        cslayout_print_ast(astp->r);
-        printf("node type: %d\n", astp->node_type);
     }
 }

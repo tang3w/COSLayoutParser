@@ -23,10 +23,10 @@ int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp, int *argc);
 #define YYSTYPE CSLAYOUTSTYPE
 }
 
-%token ATTR;
-%token NUMBER;
-%token PERCENTAGE;
-%token COORD;
+%token CSLAYOUT_TOKEN_ATTR;
+%token CSLAYOUT_TOKEN_NUMBER;
+%token CSLAYOUT_TOKEN_PERCENTAGE;
+%token CSLAYOUT_TOKEN_COORD;
 
 %left  '+' '-'
 %left  '*' '/'
@@ -35,20 +35,20 @@ int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp, int *argc);
 %%
 
 expr: %empty
-    | ATTR '=' expr { *astpp = $$ = cslayout_create_ast('=', $1, $3); }
-    | rval          { *astpp = $$ = $1; }
+    | CSLAYOUT_TOKEN_ATTR '=' expr { *astpp = $$ = cslayout_create_ast('=', $1, $3); }
+    | rval                         { *astpp = $$ = $1; }
     ;
-rval: rval '+' item { *astpp = $$ = cslayout_create_ast('+', $1, $3); }
-    | rval '-' item { *astpp = $$ = cslayout_create_ast('-', $1, $3); }
-    | item          { *astpp = $$ = $1; }
+rval: rval '+' item                { *astpp = $$ = cslayout_create_ast('+', $1, $3); }
+    | rval '-' item                { *astpp = $$ = cslayout_create_ast('-', $1, $3); }
+    | item                         { *astpp = $$ = $1; }
     ;
-item: item '*' atom { *astpp = $$ = cslayout_create_ast('*', $1, $3); }
-    | item '/' atom { *astpp = $$ = cslayout_create_ast('/', $1, $3); }
-    | atom          { *astpp = $$ = $1; }
+item: item '*' atom                { *astpp = $$ = cslayout_create_ast('*', $1, $3); }
+    | item '/' atom                { *astpp = $$ = cslayout_create_ast('/', $1, $3); }
+    | atom                         { *astpp = $$ = $1; }
     ;
-atom: NUMBER        { *astpp = $$ = $1; }
-    | PERCENTAGE    { *astpp = $$ = $1; }
-    | COORD         { *astpp = $$ = $1; }
+atom: CSLAYOUT_TOKEN_NUMBER        { *astpp = $$ = $1; }
+    | CSLAYOUT_TOKEN_PERCENTAGE    { *astpp = $$ = $1; }
+    | CSLAYOUT_TOKEN_COORD         { *astpp = $$ = $1; }
     ;
 
 %%
