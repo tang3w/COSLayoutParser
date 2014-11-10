@@ -1,6 +1,5 @@
 %{
 #include <stdio.h>
-#include "context.h"
 #include "parser.h"
 
 void lex_error(char *text);
