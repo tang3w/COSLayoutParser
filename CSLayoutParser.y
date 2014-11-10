@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
-#include "parser.h"
-#include "lex.h"
+#include "CSLayoutParser.h"
+#include "CSLayoutLex.h"
 
 void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, int *argc, char *s);
 int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp, int *argc);

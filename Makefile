@@ -1,14 +1,14 @@
-parser: main.c parser.c lex.o
+parser: main.c CSLayoutParser.c CSLayoutLex.o
 	cc -o $@ $^
 
-parser.c parser.h: parser.y
-	bison -d -o parser.c $^
+CSLayoutParser.c CSLayoutParser.h: CSLayoutParser.y
+	bison -d -o CSLayoutParser.c $^
 
-lex.o: lex.c parser.h
+CSLayoutLex.o: CSLayoutLex.c CSLayoutParser.h
 	cc -c -o $@ $<
 
-lex.c: lex.l
+CSLayoutLex.c: CSLayoutLex.l
 	flex -o $@ $<
 
 clean:
-	rm -f lex.h lex.c lex.o parser.h parser.c parser
+	rm -f CSLayoutLex.h CSLayoutLex.c CSLayoutLex.o CSLayoutParser.h CSLayoutParser.c parser

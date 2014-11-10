@@ -1,6 +1,6 @@
 %{
 #include <stdio.h>
-#include "parser.h"
+#include "CSLayoutParser.h"
 
 void lex_error(char *text);
 %}
@@ -9,7 +9,7 @@ void lex_error(char *text);
 %option reentrant
 %option bison-bridge
 %option prefix="cslayout"
-%option header-file="lex.h"
+%option header-file="CSLayoutLex.h"
 %option noinput
 %option nounput
 
