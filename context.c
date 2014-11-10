@@ -2,7 +2,7 @@
 #include "parser.h"
 #include "lex.h"
 
-int cslayoutparse (void *scanner, CSLAYOUT_AST **astpp);
+int cslayoutparse (void *scanner, CSLAYOUT_AST **astpp, int *argc);
 int cslayoutlex_init (yyscan_t* scanner);
 int cslayoutlex_destroy (yyscan_t yyscanner);
 
@@ -18,14 +18,14 @@ CSLAYOUT_AST *cslayout_create_ast(int type, CSLAYOUT_AST *l, CSLAYOUT_AST *r) {
     return astp;
 }
 
-CSLAYOUT_AST *cslayout_parse_rule(char *rule) {
+CSLAYOUT_AST *cslayout_parse_rule(char *rule, int *argc) {
     CSLAYOUT_AST *astp = NULL;
 
     yyscan_t scanner;
     cslayoutlex_init(&scanner);
     YY_BUFFER_STATE state = cslayout_scan_string(rule, scanner);
 
-    int failed = cslayoutparse(scanner, &astp);
+    int failed = cslayoutparse(scanner, &astp, argc);
 
     cslayout_delete_buffer(state, scanner);
     cslayoutlex_destroy(scanner);

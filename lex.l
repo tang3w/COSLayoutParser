@@ -15,12 +15,13 @@ void lex_error(char *text);
 %option nounput
 
 i [0-9]+
-attr tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|cc
+attr tt|tb|ll|lr|bb|bt|rr|rl|ct|cl
 digit [-+]?{i}
 float [-+]?({i}\.{i}?|{i}?\.{i})
 number {digit}|{float}[fF]?
 percentage ({digit}|{float})%
-coord $\.{attr}
+coord_name {attr}|width|height
+coord %{coord_name}
 
 %%
 
@@ -35,8 +36,8 @@ coord $\.{attr}
 {attr}       {
                  CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(ATTR, NULL, NULL);
 
-                 ast->value.coord = (char *)malloc((strlen(yytext + 2) + 1) * sizeof(char));
-                 strcpy(ast->value.coord, yytext + 2);
+                 ast->value.coord = (char *)malloc((strlen(yytext) + 1) * sizeof(char));
+                 strcpy(ast->value.coord, yytext);
 
                  return ATTR;
              }
@@ -60,8 +61,9 @@ coord $\.{attr}
 {coord}      {
                  CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(COORD, NULL, NULL);
 
-                 ast->value.coord = (char *)malloc((strlen(yytext + 2) + 1) * sizeof(char));
-                 strcpy(ast->value.coord, yytext + 2);
+                 ast->value.coord = (char *)malloc((strlen(yytext + 1) + 1) * sizeof(char));
+                 strcpy(ast->value.coord, yytext + 1);
+                 *argc += 1;
 
                  return COORD;
              }

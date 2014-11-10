@@ -3,15 +3,17 @@
 #include "context.h"
 #include "parser.h"
 
-void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s);
-int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp);
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, int *argc, char *s);
+int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp, int *argc);
 %}
 
 %define api.pure full
 %lex-param {void *scanner}
 %lex-param {CSLAYOUT_AST **astpp}
+%lex-param {int *argc}
 %parse-param {void *scanner}
 %parse-param {CSLAYOUT_AST **astpp}
+%parse-param {int *argc}
 %define api.prefix {cslayout}
 %define api.value.type {CSLAYOUT_AST *}
 
@@ -51,6 +53,6 @@ atom: NUMBER        { *astpp = $$ = $1; }
 
 %%
 
-void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s) {
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, int *argc, char *s) {
   fprintf(stderr, "%s\n", s);
 }
