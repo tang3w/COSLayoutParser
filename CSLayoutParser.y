@@ -66,7 +66,8 @@ item: item '*' atom                { *astpp = $$ = cslayout_create_ast('*', $1, 
     | item '/' atom                { *astpp = $$ = cslayout_create_ast('/', $1, $3); }
     | atom                         { *astpp = $$ = $1; }
     ;
-atom: CSLAYOUT_TOKEN_NUMBER        { *astpp = $$ = $1; }
+atom: CSLAYOUT_TOKEN_ATTR          { *astpp = $$ = $1; }
+    | CSLAYOUT_TOKEN_NUMBER        { *astpp = $$ = $1; }
     | CSLAYOUT_TOKEN_PERCENTAGE    { *astpp = $$ = $1; }
     | CSLAYOUT_TOKEN_COORD         { *astpp = $$ = $1; }
     ;
