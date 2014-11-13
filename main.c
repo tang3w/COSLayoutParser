@@ -11,8 +11,8 @@ void cslayout_print_ast(CSLAYOUT_AST *astp) {
 }
 
 int main(int argc, char **argv) {
-    int num = 0;
-    CSLAYOUT_AST *ast = cslayout_parse_rule("tt = bb = rr = ll = 50% + 10.0f", &num);
+    CSLAYOUT_AST *ast = NULL;
+    int result = cslayout_parse_rule("tt = bb = rr = ll = 50% + %f", &ast);
 
     cslayout_print_ast(ast);
     cslayout_destroy_ast(ast);

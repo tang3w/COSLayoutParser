@@ -3,17 +3,15 @@
 #include "CSLayoutParser.h"
 #include "CSLayoutLex.h"
 
-void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, int *argc, char *s);
-int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp, int *argc);
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s);
+int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp);
 %}
 
 %define api.pure full
 %lex-param {void *scanner}
 %lex-param {CSLAYOUT_AST **astpp}
-%lex-param {int *argc}
 %parse-param {void *scanner}
 %parse-param {CSLAYOUT_AST **astpp}
-%parse-param {int *argc}
 %define api.prefix {cslayout}
 %define api.value.type {CSLAYOUT_AST *}
 
@@ -21,7 +19,7 @@ int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp, int *argc);
 #define YYSTYPE CSLAYOUTSTYPE
 
 #define YY_DECL int cslayoutlex \
-    (YYSTYPE *yylval_param, yyscan_t yyscanner, CSLAYOUT_AST **astpp, int *argc)
+    (YYSTYPE *yylval_param, yyscan_t yyscanner, CSLAYOUT_AST **astpp)
 
 struct CSLAYOUT_AST {
     int node_type;
@@ -39,7 +37,7 @@ typedef struct CSLAYOUT_AST CSLAYOUT_AST;
 
 CSLAYOUT_AST *cslayout_create_ast(int type, CSLAYOUT_AST *l, CSLAYOUT_AST *r);
 
-CSLAYOUT_AST *cslayout_parse_rule(char *rule, int *argc);
+int cslayout_parse_rule(char *rule, CSLAYOUT_AST **astpp);
 void cslayout_destroy_ast(CSLAYOUT_AST *astp);
 }
 
@@ -75,11 +73,11 @@ atom: CSLAYOUT_TOKEN_ATTR          { *astpp = $$ = $1; }
 
 %%
 
-void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, int *argc, char *s) {
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s) {
   fprintf(stderr, "%s\n", s);
 }
 
-int cslayoutparse (void *scanner, CSLAYOUT_AST **astpp, int *argc);
+int cslayoutparse (void *scanner, CSLAYOUT_AST **astpp);
 int cslayoutlex_init (yyscan_t* scanner);
 int cslayoutlex_destroy (yyscan_t yyscanner);
 
@@ -95,24 +93,22 @@ CSLAYOUT_AST *cslayout_create_ast(int type, CSLAYOUT_AST *l, CSLAYOUT_AST *r) {
     return astp;
 }
 
-CSLAYOUT_AST *cslayout_parse_rule(char *rule, int *argc) {
-    CSLAYOUT_AST *astp = NULL;
-
+int cslayout_parse_rule(char *rule, CSLAYOUT_AST **astpp) {
     yyscan_t scanner;
     cslayoutlex_init(&scanner);
     YY_BUFFER_STATE state = cslayout_scan_string(rule, scanner);
 
-    int failed = cslayoutparse(scanner, &astp, argc);
+    int result = cslayoutparse(scanner, astpp);
 
     cslayout_delete_buffer(state, scanner);
     cslayoutlex_destroy(scanner);
 
-    if (failed) {
-        cslayout_destroy_ast(astp);
-        astp = NULL;
+    if (result) {
+        cslayout_destroy_ast(*astpp);
+        *astpp = NULL;
     }
 
-    return astp;
+    return result;
 }
 
 void cslayout_destroy_ast(CSLAYOUT_AST *astp) {

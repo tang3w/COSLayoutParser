@@ -20,7 +20,7 @@ number {digit}|{float}[fF]?
 percentage ({digit}|{float})%
 name tt|tb|ll|lr|bb|bt|rr|rl|ct|cl
 attr {name}|minw|maxw|minh|maxh
-coord %({name}|w|h|n)
+coord %({name}|w|h|f)
 
 %%
 
@@ -64,7 +64,6 @@ coord %({name}|w|h|n)
 
                  ast->value.coord = (char *)malloc((strlen(yytext + 1) + 1) * sizeof(char));
                  strcpy(ast->value.coord, yytext + 1);
-                 *argc += 1;
 
                  return CSLAYOUT_TOKEN_COORD;
              }
