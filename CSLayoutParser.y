@@ -70,6 +70,7 @@ atom: CSLAYOUT_TOKEN_ATTR          { *astpp = $$ = $1; }
     | CSLAYOUT_TOKEN_NUMBER        { *astpp = $$ = $1; }
     | CSLAYOUT_TOKEN_PERCENTAGE    { *astpp = $$ = $1; }
     | CSLAYOUT_TOKEN_COORD         { *astpp = $$ = $1; }
+    | '(' expr ')'                 { *astpp = $$ = $2; }
     ;
 
 %%

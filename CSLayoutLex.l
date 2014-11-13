@@ -20,7 +20,7 @@ number {digit}|{float}[fF]?
 percentage ({digit}|{float})%
 name tt|tb|ll|lr|bb|bt|rr|rl|ct|cl
 attr {name}|minw|maxw|minh|maxh
-coord %({name}|w|h)
+coord %({name}|w|h|n)
 
 %%
 
@@ -31,6 +31,8 @@ coord %({name}|w|h)
 "-"          { return '-'; }
 "*"          { return '*'; }
 "/"          { return '/'; }
+"("          { return '('; }
+")"          { return ')'; }
 
 {attr}       {
                  CSLAYOUT_AST *ast = *yylval = cslayout_create_ast(CSLAYOUT_TOKEN_ATTR, NULL, NULL);
