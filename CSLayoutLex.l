@@ -1,8 +1,6 @@
 %{
 #include <stdio.h>
 #include "CSLayoutParser.h"
-
-void lex_error(char *text);
 %}
 
 %option noyywrap
@@ -68,10 +66,10 @@ coord %({name}|w|h|f)
                  return CSLAYOUT_TOKEN_COORD;
              }
 
-.            { lex_error(yytext); }
+.            {
+                 fprintf(stderr, "Unrecognized text %s\n", yytext);
+
+                 *yylval = NULL;
+             }
 
 %%
-
-void lex_error(char *text) {
-    fprintf(stderr, "Unrecognized text %s\n", text);
-}
