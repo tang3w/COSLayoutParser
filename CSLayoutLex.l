@@ -67,9 +67,7 @@ coord %({name}|w|h|f)
              }
 
 .            {
-                 fprintf(stderr, "Unrecognized text %s\n", yytext);
-
-                 *yylval = NULL;
+                 fprintf(stderr, "CSLayout: unrecognized text %s\n", yytext);
              }
 
 %%

@@ -3,7 +3,7 @@
 #include "CSLayoutParser.h"
 #include "CSLayoutLex.h"
 
-void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s);
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *msg);
 int cslayoutlex(YYSTYPE *lvalp, void *scanner, CSLAYOUT_AST **astpp);
 %}
 
@@ -53,6 +53,7 @@ void cslayout_destroy_ast(CSLAYOUT_AST *astp);
 %%
 
 expr: %empty
+    | error                        { cslayout_destroy_ast(*astpp); *astpp = NULL; YYABORT; }
     | CSLAYOUT_TOKEN_ATTR '=' expr { *astpp = $$ = cslayout_create_ast('=', $1, $3); }
     | rval                         { *astpp = $$ = $1; }
     ;
@@ -73,8 +74,8 @@ atom: CSLAYOUT_TOKEN_ATTR          { *astpp = $$ = $1; }
 
 %%
 
-void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *s) {
-  fprintf(stderr, "%s\n", s);
+void cslayouterror(void *scanner, CSLAYOUT_AST **astpp, char *msg) {
+  fprintf(stderr, "CSLayout: %s\n", msg);
 }
 
 int cslayoutparse (void *scanner, CSLAYOUT_AST **astpp);
