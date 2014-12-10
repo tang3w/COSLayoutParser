@@ -1,14 +1,14 @@
-parser: main.c CSLayoutParser.c CSLayoutLex.o
+parser: main.c COSLayoutParser.c COSLayoutLex.o
 	cc -o $@ $^
 
-CSLayoutParser.c CSLayoutParser.h: CSLayoutParser.y
-	bison -d -o CSLayoutParser.c $^
+COSLayoutParser.c COSLayoutParser.h: COSLayoutParser.y
+	bison -d -o COSLayoutParser.c $^
 
-CSLayoutLex.o: CSLayoutLex.c CSLayoutParser.h
+COSLayoutLex.o: COSLayoutLex.c COSLayoutParser.h
 	cc -c -o $@ $<
 
-CSLayoutLex.c: CSLayoutLex.l
+COSLayoutLex.c: COSLayoutLex.l
 	flex -o $@ $<
 
 clean:
-	rm -f CSLayoutLex.h CSLayoutLex.c CSLayoutLex.o CSLayoutParser.h CSLayoutParser.c parser
+	rm -f COSLayoutLex.h COSLayoutLex.c COSLayoutLex.o COSLayoutParser.h COSLayoutParser.c parser

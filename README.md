@@ -1,4 +1,4 @@
-CSLayoutParser
+COSLayoutParser
 ==============
 
-CSLayout Rule Parser
+COSLayout Rule Parser
