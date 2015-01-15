@@ -16,9 +16,9 @@ digit [-+]?{i}
 float [-+]?({i}\.{i}?|{i}?\.{i})
 number {digit}|{float}[fF]?
 percentage ({digit}|{float})%
-name tt|tb|ll|lr|bb|bt|rr|rl|ct|cl
+name tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr
 attr {name}|minw|maxw|minh|maxh
-coord %({name}|w|h|f)
+coord %({name}|w|h|f|p)
 
 %%
 
