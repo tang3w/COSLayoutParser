@@ -53,23 +53,23 @@ void coslayout_destroy_ast(COSLAYOUT_AST *astp);
 %%
 
 expr: %empty
-    | error                        { coslayout_destroy_ast(*astpp); *astpp = NULL; YYABORT; }
+    | error                         { coslayout_destroy_ast(*astpp); *astpp = NULL; YYABORT; }
     | COSLAYOUT_TOKEN_ATTR '=' expr { *astpp = $$ = coslayout_create_ast('=', $1, $3); }
-    | rval                         { *astpp = $$ = $1; }
+    | rval                          { *astpp = $$ = $1; }
     ;
-rval: rval '+' item                { *astpp = $$ = coslayout_create_ast('+', $1, $3); }
-    | rval '-' item                { *astpp = $$ = coslayout_create_ast('-', $1, $3); }
-    | item                         { *astpp = $$ = $1; }
+rval: rval '+' item                 { *astpp = $$ = coslayout_create_ast('+', $1, $3); }
+    | rval '-' item                 { *astpp = $$ = coslayout_create_ast('-', $1, $3); }
+    | item                          { *astpp = $$ = $1; }
     ;
-item: item '*' atom                { *astpp = $$ = coslayout_create_ast('*', $1, $3); }
-    | item '/' atom                { *astpp = $$ = coslayout_create_ast('/', $1, $3); }
-    | atom                         { *astpp = $$ = $1; }
+item: item '*' atom                 { *astpp = $$ = coslayout_create_ast('*', $1, $3); }
+    | item '/' atom                 { *astpp = $$ = coslayout_create_ast('/', $1, $3); }
+    | atom                          { *astpp = $$ = $1; }
     ;
 atom: COSLAYOUT_TOKEN_ATTR          { *astpp = $$ = $1; }
     | COSLAYOUT_TOKEN_NUMBER        { *astpp = $$ = $1; }
     | COSLAYOUT_TOKEN_PERCENTAGE    { *astpp = $$ = $1; }
     | COSLAYOUT_TOKEN_COORD         { *astpp = $$ = $1; }
-    | '(' expr ')'                 { *astpp = $$ = $2; }
+    | '(' expr ')'                  { *astpp = $$ = $2; }
     ;
 
 %%
