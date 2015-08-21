@@ -44,6 +44,8 @@ void coslayout_destroy_ast(COSLAYOUT_AST *astp);
 %token COSLAYOUT_TOKEN_ATTR;
 %token COSLAYOUT_TOKEN_NUMBER;
 %token COSLAYOUT_TOKEN_PERCENTAGE;
+%token COSLAYOUT_TOKEN_PERCENTAGE_H;
+%token COSLAYOUT_TOKEN_PERCENTAGE_V;
 %token COSLAYOUT_TOKEN_COORD;
 
 %left  '+' '-'
@@ -68,6 +70,8 @@ item: item '*' atom                 { *astpp = $$ = coslayout_create_ast('*', $1
 atom: COSLAYOUT_TOKEN_ATTR          { *astpp = $$ = $1; }
     | COSLAYOUT_TOKEN_NUMBER        { *astpp = $$ = $1; }
     | COSLAYOUT_TOKEN_PERCENTAGE    { *astpp = $$ = $1; }
+    | COSLAYOUT_TOKEN_PERCENTAGE_H  { *astpp = $$ = $1; }
+    | COSLAYOUT_TOKEN_PERCENTAGE_V  { *astpp = $$ = $1; }
     | COSLAYOUT_TOKEN_COORD         { *astpp = $$ = $1; }
     | '(' expr ')'                  { *astpp = $$ = $2; }
     ;

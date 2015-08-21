@@ -15,7 +15,7 @@ i [0-9]+
 digit [-+]?{i}
 float [-+]?({i}\.{i}?|{i}?\.{i})
 number {digit}|{float}[fF]?
-percentage ({digit}|{float})%
+percentage ([HV]:)?({digit}|{float})%
 attr [_a-z][_a-z0-9-]*
 coord %(tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|w|h|f|p|\^f|\^p|:f|:p)
 
@@ -49,11 +49,30 @@ coord %(tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|w|h|f|p|\^f|\^p|:f|:p)
              }
 
 {percentage} {
-                 COSLAYOUT_AST *ast = *yylval = coslayout_create_ast(COSLAYOUT_TOKEN_PERCENTAGE, NULL, NULL);
+                 float value = 0.0;
+                 int   type  = COSLAYOUT_TOKEN_PERCENTAGE;
 
-                 ast->value.percentage = atof(yytext);
+                 switch(yytext[0]) {
+                 case 'H':
+                     value = atof(yytext + 2);
+                     type  = COSLAYOUT_TOKEN_PERCENTAGE_H;
+                     break;
 
-                 return COSLAYOUT_TOKEN_PERCENTAGE;
+                 case 'V':
+                     value = atof(yytext + 2);
+                     type  = COSLAYOUT_TOKEN_PERCENTAGE_V;
+                     break;
+
+                 default:
+                     value = atof(yytext);
+                     break;
+                 }
+
+                 COSLAYOUT_AST *ast = *yylval = coslayout_create_ast(type, NULL, NULL);
+
+                 ast->value.percentage = value;
+
+                 return type;
              }
 
 {coord}      {
