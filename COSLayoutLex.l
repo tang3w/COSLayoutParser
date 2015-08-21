@@ -11,13 +11,15 @@
 %option noinput
 %option nounput
 
-i [0-9]+
-digit [-+]?{i}
-float [-+]?({i}\.{i}?|{i}?\.{i})
-number {digit}|{float}
-percentage ([HV]:)?{number}%
-attr [_a-z][_a-z0-9-]*
-coord %(tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|w|h|f|p|\^f|\^p|@f|@p)
+i            [0-9]+
+digit        [-+]?{i}
+float        [-+]?({i}\.{i}?|{i}?\.{i})
+number       {digit}|{float}
+hv           [HV]:
+percentage   {hv}?{number}%
+pcoord       {hv}?%(p|\^p|@p)
+coord        %(tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|w|h|f|\^f|@f)
+attr         [_a-z][_a-z0-9-]*
 
 %%
 
@@ -75,11 +77,42 @@ coord %(tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|w|h|f|p|\^f|\^p|@f|@p)
                  return type;
              }
 
+{pcoord}     {
+                 char *text = yytext;
+                 int   type = COSLAYOUT_TOKEN_COORD_PERCENTAGE;
+
+                 switch(yytext[0]) {
+                 case 'H':
+                     text = yytext + 2;
+                     type = COSLAYOUT_TOKEN_COORD_PERCENTAGE_H;
+                     break;
+
+                 case 'V':
+                     text = yytext + 2;
+                     type = COSLAYOUT_TOKEN_COORD_PERCENTAGE_H;
+                     break;
+
+                 default:
+                     break;
+                 }
+
+                 char *spec = text + 1;
+
+                 COSLAYOUT_AST *ast = *yylval = coslayout_create_ast(type, NULL, NULL);
+
+                 ast->value.coord = (char *)malloc((strlen(spec) + 1) * sizeof(char));
+                 strcpy(ast->value.coord, spec);
+
+                 return type;
+             }
+
 {coord}      {
+                 char *spec = yytext + 1;
+
                  COSLAYOUT_AST *ast = *yylval = coslayout_create_ast(COSLAYOUT_TOKEN_COORD, NULL, NULL);
 
-                 ast->value.coord = (char *)malloc((strlen(yytext + 1) + 1) * sizeof(char));
-                 strcpy(ast->value.coord, yytext + 1);
+                 ast->value.coord = (char *)malloc((strlen(spec) + 1) * sizeof(char));
+                 strcpy(ast->value.coord, spec);
 
                  return COSLAYOUT_TOKEN_COORD;
              }
