@@ -14,8 +14,8 @@
 i [0-9]+
 digit [-+]?{i}
 float [-+]?({i}\.{i}?|{i}?\.{i})
-number {digit}|{float}[fF]?
-percentage ([HV]:)?({digit}|{float})%
+number {digit}|{float}
+percentage ([HV]:)?{number}%
 attr [_a-z][_a-z0-9-]*
 coord %(tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|w|h|f|p|\^f|\^p|@f|@p)
 
