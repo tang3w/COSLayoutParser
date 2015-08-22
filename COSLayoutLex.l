@@ -26,6 +26,10 @@ attr         [_a-z][_a-z0-9-]*
 
 [ \n\r\t]
 
+"+="         { return COSLAYOUT_TOKEN_ADD_ASSIGN; }
+"-="         { return COSLAYOUT_TOKEN_SUB_ASSIGN; }
+"*="         { return COSLAYOUT_TOKEN_MUL_ASSIGN; }
+"/="         { return COSLAYOUT_TOKEN_DIV_ASSIGN; }
 "="          { return '='; }
 "+"          { return '+'; }
 "-"          { return '-'; }
