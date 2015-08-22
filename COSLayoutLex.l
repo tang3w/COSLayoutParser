@@ -125,7 +125,7 @@ attr         [_a-z][_a-z0-9-]*
              }
 
 .            {
-                 fprintf(stderr, "COSLayout: unrecognized text %s\n", yytext);
+                 fprintf(stderr, "COSLayout: Unrecognized text \"%s\", ignored.\n", yytext);
              }
 
 %%
