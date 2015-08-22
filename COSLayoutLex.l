@@ -19,6 +19,7 @@ hv           [HV]:
 percentage   {hv}?{number}%
 pcoord       {hv}?%(p|\^p|@p)
 coord        %(tt|tb|ll|lr|bb|bt|rr|rl|ct|cl|cb|cr|w|h|f|\^f|@f)
+nil          nil
 attr         [_a-z][_a-z0-9-]*
 
 %%
@@ -32,6 +33,12 @@ attr         [_a-z][_a-z0-9-]*
 "/"          { return '/'; }
 "("          { return '('; }
 ")"          { return ')'; }
+
+{nil}        {
+                 *yylval = coslayout_create_ast(COSLAYOUT_TOKEN_NIL, NULL, NULL);
+
+                 return COSLAYOUT_TOKEN_NIL;
+             }
 
 {attr}       {
                  COSLAYOUT_AST *ast = *yylval = coslayout_create_ast(COSLAYOUT_TOKEN_ATTR, NULL, NULL);
